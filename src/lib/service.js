@@ -1,4 +1,3 @@
-import bcrypt from "bcrypt";
 import {
   addDoc,
   collection,
@@ -34,16 +33,21 @@ export async function retrieveDataById(collectionName, id) {
 
 // register user
 export const signUp = async (userData) => {
+  console.log({ userData });
   const q = query(
     collection(firestore, "users"),
     where("email", "==", userData.email)
   );
+
+  console.log({ q });
 
   const snapshot = await getDocs(q);
   const users = snapshot.docs?.map((doc) => ({
     id: doc.id,
     ...doc.data(),
   }));
+
+  console.log({ users });
 
   if (users.length > 0) {
     return {
@@ -53,7 +57,6 @@ export const signUp = async (userData) => {
     };
   } else {
     userData.role = "member";
-    userData.password = await bcrypt.hash(userData.password, 10);
 
     try {
       await addDoc(collection(firestore, "users"), userData);
@@ -69,5 +72,27 @@ export const signUp = async (userData) => {
         message: "Failed to register user",
       };
     }
+  }
+};
+
+export const signIn = async (userData) => {
+  // console.log({ userData });
+  const q = query(
+    collection(firestore, "users"),
+    where("email", "==", userData.email)
+  );
+
+  const snapshot = await getDocs(q);
+  const data = snapshot.docs?.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+
+  // console.log({ data });
+
+  if (data.length > 0) {
+    return data[0];
+  } else {
+    return null;
   }
 };
