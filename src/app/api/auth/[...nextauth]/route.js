@@ -1,4 +1,5 @@
 import { signIn } from "@/lib/service";
+import { compare } from "bcrypt";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -25,8 +26,19 @@ const authOptions = {
           email,
         });
 
-        if (user && user.password === password) {
-          return user;
+        if (user) {
+          const passwordConfirm = await compare(password, user.password);
+
+          // console.log({
+          //   inputPass: password,
+          //   userPass: user.password,
+          //   isMatch: passwordConfirm,
+          // });
+          if (passwordConfirm) {
+            return user;
+          } else {
+            return null;
+          }
         } else {
           return null;
         }

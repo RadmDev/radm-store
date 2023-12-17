@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import {
   addDoc,
   collection,
@@ -56,8 +57,11 @@ export const signUp = async (userData) => {
       message: "Email already exists",
     };
   } else {
-    userData.role = "member";
+    if (!userData.role) {
+      userData.role = "member";
+    }
 
+    userData.password = await bcrypt.hash(userData.password, 10);
     try {
       await addDoc(collection(firestore, "users"), userData);
       return {
