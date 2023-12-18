@@ -4,6 +4,7 @@ import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { FaGoogle } from "react-icons/fa";
 
 const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -70,6 +71,19 @@ const LoginPage = () => {
             {isLoading ? "Loading..." : "Login"}
           </button>
         </form>
+        <hr className="my-5" />
+        <div className="w-full">
+          <button
+            type="button"
+            onClick={() => signIn("google", { callbackUrl, redirect: false })}
+            className="flex gap-2 items-center justify-center w-full p-4 bg-color-black-1 text-color-white-1 hover:opacity-50 focus:outline-4 focus:outline-color-black transition-all duration-300 ease-in-out"
+          >
+            <i className="text-color-white-1">
+              <FaGoogle size={24} />
+            </i>
+            Login With Google
+          </button>
+        </div>
       </div>
       <p>
         Don{"'"}t have an account? Sign up{" "}

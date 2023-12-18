@@ -80,7 +80,6 @@ export const signUp = async (userData) => {
 };
 
 export const signIn = async (userData) => {
-  // console.log({ userData });
   const q = query(
     collection(firestore, "users"),
     where("email", "==", userData.email)
@@ -92,11 +91,31 @@ export const signIn = async (userData) => {
     ...doc.data(),
   }));
 
-  // console.log({ data });
-
   if (data.length > 0) {
     return data[0];
   } else {
     return null;
+  }
+};
+
+export const loginWithGoogle = async (data, callback) => {
+  const q = query(
+    collection(firestore, "users"),
+    where("email", "==", data.email)
+  );
+
+  const snapshot = await getDocs(q);
+  const user = snapshot.docs?.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+
+  if (user.length > 0) {
+    callback(user[0]);
+  } else {
+    data.role = "member";
+    await addDoc(collection(firestore, "users"), data).then(() => {
+      callback(data);
+    });
   }
 };

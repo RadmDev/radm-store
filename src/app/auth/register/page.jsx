@@ -21,8 +21,6 @@ const RegisterPage = () => {
       password: e.target.password.value,
     };
 
-    // console.log({ data });
-
     const result = await fetch("/api/user/register", {
       method: "POST",
       headers: {

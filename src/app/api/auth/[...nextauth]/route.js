@@ -1,7 +1,8 @@
-import { signIn } from "@/lib/service";
+import { loginWithGoogle, signIn } from "@/lib/service";
 import { compare } from "bcrypt";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 
 const authOptions = {
   session: {
@@ -20,8 +21,6 @@ const authOptions = {
       async authorize(credentials) {
         const { email, password } = credentials;
 
-        // console.log({ email, password });
-
         const user = await signIn({
           email,
         });
@@ -29,11 +28,6 @@ const authOptions = {
         if (user) {
           const passwordConfirm = await compare(password, user.password);
 
-          // console.log({
-          //   inputPass: password,
-          //   userPass: user.password,
-          //   isMatch: passwordConfirm,
-          // });
           if (passwordConfirm) {
             return user;
           } else {
@@ -43,6 +37,10 @@ const authOptions = {
           return null;
         }
       },
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_OAUTH_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
     }),
   ],
 
@@ -54,9 +52,22 @@ const authOptions = {
           (token.name = user.fullname),
           (token.phone = user.phone),
           (token.role = user.role);
-        console.log(token);
       }
-      console.log(token);
+
+      if (account?.provider === "google") {
+        const data = {
+          fullname: user.name,
+          email: user.email,
+          type: "google",
+        };
+
+        await loginWithGoogle(data, (data) => {
+          (token.email = data.email),
+            (token.name = data.fullname),
+            (token.phone = data.phone),
+            (token.role = data.role);
+        });
+      }
       return token;
     },
 
