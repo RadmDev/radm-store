@@ -1,4 +1,4 @@
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/layouts/Navbar";
 import { Poppins } from "next/font/google";
 import { NextAuthProvider } from "./Providers";
 import "./globals.css";

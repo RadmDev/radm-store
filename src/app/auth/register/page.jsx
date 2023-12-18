@@ -1,5 +1,7 @@
 "use client";
 
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -29,7 +31,7 @@ const RegisterPage = () => {
       body: JSON.stringify(data),
     });
 
-    if (result.status === 200) {
+    if (result.status) {
       setIsLoading(false);
       e.target.reset();
       push("/auth/login");
@@ -46,48 +48,13 @@ const RegisterPage = () => {
       {error && <p className="text-red-500 py-2">{error}</p>}
       <div className="w-full lg:w-[30%] p-5 border shadow-sm mb-5">
         <form action="" onSubmit={handleSubmit}>
-          <div className="flex flex-col my-5">
-            <label htmlFor="email">Email</label>
-            <input
-              name="email"
-              id="email"
-              type="email"
-              className="p-3 bg-color-white-2 mt-1 focus:outline-none"
-            />
-          </div>
-          <div className="flex flex-col my-5">
-            <label htmlFor="fullname">Fullname</label>
-            <input
-              name="fullname"
-              id="fullname"
-              type="text"
-              className="p-3 bg-color-white-2 mt-1 focus:outline-none"
-            />
-          </div>
-          <div className="flex flex-col my-5">
-            <label htmlFor="phone">Phone</label>
-            <input
-              name="phone"
-              id="phone"
-              type="text"
-              className="p-3 bg-color-white-2 mt-1 focus:outline-none"
-            />
-          </div>
-          <div className="flex flex-col my-5">
-            <label htmlFor="password">Password</label>
-            <input
-              name="password"
-              id="password"
-              type="password"
-              className="p-3 bg-color-white-2 mt-1 focus:outline-none"
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full p-3 bg-color-black-1 text-color-white-1 hover:opacity-50 focus:outline-4 focus:outline-color-black transition-all duration-300 ease-in-out"
-          >
+          <Input type="email" name="email" label="Email" required />
+          <Input type="text" name="fullname" label="Fullname" required />
+          <Input type="number" name="phone" label="Phone" required />
+          <Input type="password" name="password" label="Password" required />
+          <Button type="submit" className="p-3">
             {isLoading ? "Loading..." : "Register"}
-          </button>
+          </Button>
         </form>
       </div>
       <p>

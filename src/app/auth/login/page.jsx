@@ -1,5 +1,7 @@
 "use client";
 
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -46,43 +48,24 @@ const LoginPage = () => {
       {error && <p className="text-red-500 py-2">{error}</p>}
       <div className="w-full lg:w-[30%] p-5 border shadow-sm mb-5">
         <form action="" onSubmit={handleSubmit}>
-          <div className="flex flex-col my-5">
-            <label htmlFor="email">Email</label>
-            <input
-              name="email"
-              id="email"
-              type="email"
-              className="p-3 bg-color-white-2 mt-1 focus:outline-none"
-            />
-          </div>
-          <div className="flex flex-col my-5">
-            <label htmlFor="password">Password</label>
-            <input
-              name="password"
-              id="password"
-              type="password"
-              className="p-3 bg-color-white-2 mt-1 focus:outline-none"
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full p-3 bg-color-black-1 text-color-white-1 hover:opacity-50 focus:outline-4 focus:outline-color-black transition-all duration-300 ease-in-out"
-          >
+          <Input label="Email" name="email" type="email" />
+          <Input label="Password" name="password" type="password" />
+          <Button type="submit" className="p-3">
             {isLoading ? "Loading..." : "Login"}
-          </button>
+          </Button>
         </form>
         <hr className="my-5" />
         <div className="w-full">
-          <button
+          <Button
             type="button"
+            className="p-4"
             onClick={() => signIn("google", { callbackUrl, redirect: false })}
-            className="flex gap-2 items-center justify-center w-full p-4 bg-color-black-1 text-color-white-1 hover:opacity-50 focus:outline-4 focus:outline-color-black transition-all duration-300 ease-in-out"
           >
             <i className="text-color-white-1">
               <FaGoogle size={24} />
             </i>
             Login With Google
-          </button>
+          </Button>
         </div>
       </div>
       <p>

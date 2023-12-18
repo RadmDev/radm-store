@@ -1,32 +1,29 @@
-import { getFirestoreData, signUp } from "@/lib/service";
+import { signUp } from "@/services/auth";
 
 export const POST = async (request) => {
-  try {
-    const { email, fullname, phone, password } = await request.json();
+  const { email, fullname, phone, password } = await request.json();
 
-    const data = {
-      email,
-      fullname,
-      phone,
-      password,
-    };
+  const data = {
+    email,
+    fullname,
+    phone,
+    password,
+  };
 
-    // console.log({ data });
-    const createUser = await signUp(data);
-
-    if (createUser.status) {
-      return new Response(JSON.stringify(createUser), {
-        status: 200,
+  // console.log({ data });
+  await signUp(data, (status) => {
+    if (status) {
+      return new Response({
+        status: true,
+        statusCode: 200,
+        message: "User created successfully",
       });
     } else {
-      return new Response(JSON.stringify(createUser), {
-        status: 400,
+      return new Response({
+        status: false,
+        statusCode: 400,
+        message: "Failed to register user",
       });
     }
-  } catch (error) {
-    console.log(error);
-    return new Response(JSON.stringify(error), {
-      status: 500,
-    });
-  }
+  });
 };
