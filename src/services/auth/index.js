@@ -2,7 +2,7 @@ import { addData, retrieveDataByField } from "@/lib/service";
 import bcrypt from "bcrypt";
 
 // register user
-export const signUp = async (userData, callback) => {
+export const signUp = async (userData) => {
   const user = await retrieveDataByField("users", "email", userData.email);
 
   if (user.length > 0) {
@@ -20,9 +20,21 @@ export const signUp = async (userData, callback) => {
     userData.createdAt = new Date();
     userData.updatedAt = new Date();
 
-    await addData("users", userData, (result) => {
-      callback(result);
-    });
+    try {
+      await addData("users", userData);
+      return {
+        status: true,
+        statusCode: 200,
+        message: "User created successfully",
+      };
+    } catch (error) {
+      console.error("Error adding user:", error);
+      return {
+        status: false,
+        statusCode: 500,
+        message: "Failed to register user",
+      };
+    }
   }
 };
 

@@ -31,7 +31,9 @@ const RegisterPage = () => {
       body: JSON.stringify(data),
     });
 
-    if (result.status) {
+    console.log(result);
+
+    if (result.ok) {
       setIsLoading(false);
       e.target.reset();
       push("/auth/login");
