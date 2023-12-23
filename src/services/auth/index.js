@@ -1,8 +1,8 @@
-import { addData, retrieveDataByField } from "@/lib/service";
+import { addData, retrieveDataByField } from "@/lib/firebase/service";
 import bcrypt from "bcrypt";
 
 // register user
-export const signUp = async (userData) => {
+export const signUp = async (userData, callback) => {
   const user = await retrieveDataByField("users", "email", userData.email);
 
   if (user.length > 0) {
@@ -20,21 +20,15 @@ export const signUp = async (userData) => {
     userData.createdAt = new Date();
     userData.updatedAt = new Date();
 
-    try {
-      await addData("users", userData);
-      return {
-        status: true,
-        statusCode: 200,
-        message: "User created successfully",
-      };
-    } catch (error) {
-      console.error("Error adding user:", error);
-      return {
-        status: false,
-        statusCode: 500,
-        message: "Failed to register user",
-      };
-    }
+    await addData("users", userData, (result) => {
+      callback(result);
+    });
+
+    return {
+      status: true,
+      statusCode: 200,
+      message: "User created successfully",
+    };
   }
 };
 
