@@ -1,4 +1,4 @@
-import { signUp } from "@/services/auth";
+import { signUp } from "@/services/auth/services";
 
 export const POST = async (request) => {
   const { email, fullname, phone, password } = await request.json();
@@ -22,13 +22,7 @@ export const POST = async (request) => {
     message: "Failed to register user",
   };
 
-  const result = await signUp(data, (status) => {
-    if (status) {
-      return new Response(signUpSuccess);
-    } else {
-      return new Response(signUpFailed);
-    }
-  });
+  const result = await signUp(data);
 
   if (result.status) {
     return Response.json(signUpSuccess, { status: 200 });

@@ -38,13 +38,12 @@ export async function retrieveDataByField(collectionName, field, value) {
   return data;
 }
 
-export async function addData(collectionName, data, callback) {
-  await addDoc(collection(firestore, collectionName), data)
-    .then(() => {
-      callback(true);
-    })
-    .catch((error) => {
-      callback(false);
-      console.log(error);
-    });
+export async function addData(collectionName, data) {
+  try {
+    await addDoc(collection(firestore, collectionName), data);
+
+    return true;
+  } catch (error) {
+    return false;
+  }
 }
