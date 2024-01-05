@@ -22,6 +22,8 @@ module.exports = {
             1: "#000000",
           },
           blue: "#23BEBE",
+          red: "#FF6363",
+          yellow: "#E9D53B",
         },
       },
     },

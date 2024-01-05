@@ -1,7 +1,8 @@
 import React from "react";
 
 const Input = (props) => {
-  const { label, name, type, placeholder, required } = props;
+  const { label, name, type, placeholder, required, className, ...rest } =
+    props;
   return (
     <div className="flex flex-col my-5">
       {label && <label htmlFor={name}>{label}</label>}
@@ -11,7 +12,8 @@ const Input = (props) => {
         type={type}
         placeholder={placeholder}
         required={required}
-        className="p-3 bg-color-white-2 mt-1 focus:outline-none"
+        {...rest}
+        className={`p-3 bg-color-white-2 mt-1 focus:outline-none ${className}`}
       />
     </div>
   );
