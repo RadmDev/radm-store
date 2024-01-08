@@ -5,7 +5,6 @@ import React from "react";
 
 const Navbar = () => {
   const { data } = useSession();
-
   return (
     <div className="fixed w-full h-20 p-5 bg-color-black-1 text-color-white-1 flex items-center justify-end">
       <button

@@ -1,6 +1,8 @@
+import { signJwt } from "@/lib/jwt/services";
 import { loginWithGoogle, signIn } from "@/services/auth/services";
 import { compare } from "bcrypt";
 import NextAuth from "next-auth";
+import { encode, getToken } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 
@@ -47,6 +49,7 @@ const authOptions = {
   callbacks: {
     async jwt({ token, account, profile, user }) {
       // Persist the OAuth access_token and or the user id to the token right after signin
+
       if (account?.provider === "credentials") {
         (token.email = user.email),
           (token.name = user.fullname),
@@ -68,6 +71,7 @@ const authOptions = {
             (token.role = data.role);
         });
       }
+
       return token;
     },
 
@@ -84,6 +88,14 @@ const authOptions = {
       if ("role" in token) {
         session.user.role = token.role;
       }
+
+      const accessToken = signJwt({
+        token: token,
+        secret: process.env.NEXTAUTH_SECRET,
+      });
+
+      session.accessToken = accessToken;
+
       return session;
     },
   },

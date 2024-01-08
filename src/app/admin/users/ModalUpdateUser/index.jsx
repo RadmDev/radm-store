@@ -5,6 +5,7 @@ import Input from "@/components/ui/Input";
 import Modal from "@/components/ui/Modal";
 import Select from "@/components/ui/Select";
 import userServices from "@/services/user";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 
 const ModalUpdateUser = (props) => {
@@ -12,17 +13,25 @@ const ModalUpdateUser = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const { data } = useSession();
+
   const handleUpdateUser = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
 
-    const data = {
+    const inputedData = {
       role: e.target.role.value,
     };
 
     try {
-      const result = await userServices.updateUser(updatedUser?.id, data);
+      const result = await userServices.updateUser(
+        updatedUser?.id,
+        inputedData,
+        data?.accessToken
+      );
+
+      console.log(result);
 
       if (result.data.status) {
         setIsLoading(false);
